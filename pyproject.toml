@@ -1,0 +1,9 @@
+[project]
+name = "cyberkingdoms-sqlite-prototype"
+version = "0.1.0"
+description = "CyberKingdoms VS-001 backend prototype using SQLite and Python standard library"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.unittest]
+start-directory = "backend/tests"

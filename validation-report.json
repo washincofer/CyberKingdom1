@@ -1,0 +1,53 @@
+{
+  "project": "CyberKingdom",
+  "package": "SQLite Prototype v0.1",
+  "status": "READY_FOR_GITHUB_UPLOAD",
+  "validated_at_utc": "2026-08-13T21:19:50.583494Z",
+  "environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "results": {
+    "unit_and_concurrency_tests": {
+      "status": "PASS",
+      "passed": 14,
+      "failed": 0
+    },
+    "vs001_playtest": {
+      "status": "PASS",
+      "final_balance_cz": 30,
+      "final_ration_qty": 0
+    },
+    "http_smoke": {
+      "status": "PASS",
+      "routes": [
+        "GET /health",
+        "GET /api/v1/me"
+      ]
+    },
+    "github_actions": {
+      "status": "CONFIGURED_NOT_EXECUTED_HERE",
+      "matrix": [
+        "3.11",
+        "3.12",
+        "3.13"
+      ]
+    }
+  },
+  "coverage_focus": [
+    "FIFO queue limit 10",
+    "idempotent public work",
+    "single settlement under two reconcilers",
+    "last-item purchase has one winner",
+    "same idempotency key creates one purchase",
+    "ledger zero-sum",
+    "purchase and consume flow"
+  ],
+  "known_limits": [
+    "SQLite prototype is not production database authority",
+    "no real authentication",
+    "DEMO economy values",
+    "GitHub Actions will execute only after repository upload"
+  ]
+}

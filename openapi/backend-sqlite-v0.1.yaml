@@ -1,0 +1,69 @@
+openapi: 3.1.0
+info:
+  title: CyberKingdoms SQLite Prototype API
+  version: 0.1.0
+  description: >-
+    Prototype API preserving the Backend Integration Sprint 01 / VS-001 behavior.
+    SQLite is temporary prototype persistence; DEMO values are not balance authority.
+servers:
+  - url: http://127.0.0.1:8080/api/v1
+paths:
+  /me:
+    get: {responses: {'200': {description: Current account and citizen}}}
+  /actions:
+    get: {responses: {'200': {description: FIFO action queue, max 10 pending}}}
+  /actions/{id}:
+    get:
+      parameters: [{in: path, name: id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Action state}}
+    delete:
+      parameters: [{in: path, name: id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Queued action canceled}, '409': {description: Already started}}
+  /public-jobs:
+    post:
+      parameters: [{in: header, name: Idempotency-Key, required: true, schema: {type: string}}]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {duration_seconds: {type: integer, minimum: 1, maximum: 86400}}
+      responses: {'201': {description: Public work enqueued}, '422': {description: Rule violation}}
+  /accounts/{id}/balance:
+    get:
+      parameters: [{in: path, name: id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Cz balance}}
+  /accounts/{id}/transactions:
+    get:
+      parameters: [{in: path, name: id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Ledger transactions}}
+  /inventories/{id}:
+    get:
+      parameters: [{in: path, name: id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Inventory projection}}
+  /markets/{city_id}/listings:
+    get:
+      parameters: [{in: path, name: city_id, required: true, schema: {type: string}}]
+      responses: {'200': {description: Active local listings}}
+  /market-listings/{id}/purchase:
+    post:
+      parameters:
+        - {in: path, name: id, required: true, schema: {type: string}}
+        - {in: header, name: Idempotency-Key, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {type: object, required: [quantity], properties: {quantity: {type: integer, minimum: 1}}}
+      responses: {'200': {description: Direct purchase completed atomically}}
+  /items/{code}/consume:
+    post:
+      parameters:
+        - {in: path, name: code, required: true, schema: {type: string}}
+        - {in: header, name: Idempotency-Key, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {type: object, required: [quantity], properties: {quantity: {type: integer, const: 1}}}
+      responses: {'200': {description: Consumable applied exactly once}}

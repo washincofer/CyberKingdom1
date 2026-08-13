@@ -1,0 +1,134 @@
+{
+  "journey": "VS-001",
+  "steps": [
+    {
+      "step": "initial",
+      "result": {
+        "me": {
+          "account": {
+            "id": "acc-player",
+            "display_name": "Prototype Player"
+          },
+          "citizen": {
+            "id": "cit-player",
+            "account_id": "acc-player",
+            "city_id": "city-alpha",
+            "vitals": {
+              "hunger": 45,
+              "energy": 100
+            }
+          },
+          "financial_account_id": "fa-player",
+          "inventory_id": "inv-player"
+        },
+        "balance": {
+          "account_id": "fa-player",
+          "currency": "Cz",
+          "balance": 0,
+          "available": 0
+        }
+      }
+    },
+    {
+      "step": "public_work",
+      "result": {
+        "public_job_id": "job-c9d7f24d7e80",
+        "action": {
+          "id": "act-c9d7f24d7e80",
+          "citizen_id": "cit-player",
+          "type": "PUBLIC_WORK",
+          "status": "RUNNING",
+          "position": 1,
+          "starts_at": "2026-08-13T21:19:03Z",
+          "due_at": "2026-08-13T21:19:04Z",
+          "created_at": "2026-08-13T21:19:03Z",
+          "started_at": "2026-08-13T21:19:03Z",
+          "completed_at": null
+        }
+      }
+    },
+    {
+      "step": "reconcile",
+      "result": {
+        "started": 0,
+        "completed": 1
+      }
+    },
+    {
+      "step": "balance_after_work",
+      "result": {
+        "account_id": "fa-player",
+        "currency": "Cz",
+        "balance": 50,
+        "available": 50
+      }
+    },
+    {
+      "step": "purchase",
+      "result": {
+        "id": "pur-693496faf676",
+        "mode": "DIRECT",
+        "status": "COMPLETED",
+        "listing_id": "lst-ration-basic",
+        "quantity": 1,
+        "total_cz": 20,
+        "item_code": "RATION_BASIC"
+      }
+    },
+    {
+      "step": "inventory_after_purchase",
+      "result": {
+        "id": "inv-player",
+        "items": {
+          "RATION_BASIC": 1
+        }
+      }
+    },
+    {
+      "step": "consume",
+      "result": {
+        "item_code": "RATION_BASIC",
+        "quantity": 1,
+        "vitals": {
+          "hunger": 70,
+          "energy": 90
+        }
+      }
+    },
+    {
+      "step": "final",
+      "result": {
+        "me": {
+          "account": {
+            "id": "acc-player",
+            "display_name": "Prototype Player"
+          },
+          "citizen": {
+            "id": "cit-player",
+            "account_id": "acc-player",
+            "city_id": "city-alpha",
+            "vitals": {
+              "hunger": 70,
+              "energy": 90
+            }
+          },
+          "financial_account_id": "fa-player",
+          "inventory_id": "inv-player"
+        },
+        "balance": {
+          "account_id": "fa-player",
+          "currency": "Cz",
+          "balance": 30,
+          "available": 30
+        },
+        "inventory": {
+          "id": "inv-player",
+          "items": {
+            "RATION_BASIC": 0
+          }
+        }
+      }
+    }
+  ],
+  "status": "PASS"
+}

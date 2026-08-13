@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CyberKingdoms — VS-001 SQLite Prototype</title>
+<style>
+:root{font-family:Inter,system-ui,sans-serif;color:#d9e7ff;background:#07101f}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#07101f,#101a2e);min-height:100vh}.wrap{max-width:1100px;margin:auto;padding:32px}.top{display:flex;justify-content:space-between;align-items:end;gap:16px}.badge{border:1px solid #3f7cff;border-radius:999px;padding:6px 10px;font-size:12px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:24px}.card{background:#101a2ecc;border:1px solid #273858;border-radius:16px;padding:18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#0a1426;border-radius:12px;padding:12px}.value{font-size:24px;font-weight:700}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}button{cursor:pointer;border:0;border-radius:10px;padding:11px 14px;font-weight:700;background:#2d6fff;color:white}button.secondary{background:#263653}pre{background:#050b15;border-radius:10px;padding:12px;min-height:220px;max-height:420px;overflow:auto;color:#bcd2ff}.muted{color:#8ea3c5;font-size:13px}@media(max-width:800px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="wrap">
+<div class="top"><div><div class="badge">VS-001 • SQLite Prototype v0.1</div><h1>CyberKingdoms Backend Slice</h1><div class="muted">Trabalho → Action Queue → Cz → Mercado → Comprar → Consumir</div></div><button class="secondary" onclick="refreshAll()">Atualizar</button></div>
+<div class="grid">
+<section class="card"><h2>Estado do cidadão</h2><div class="stats"><div class="stat"><div class="muted">Saldo</div><div class="value" id="balance">–</div></div><div class="stat"><div class="muted">Fome</div><div class="value" id="hunger">–</div></div><div class="stat"><div class="muted">Energia</div><div class="value" id="energy">–</div></div></div><div class="actions"><button onclick="work()">Iniciar Trabalho</button><button onclick="reconcile()">Reconciliar</button><button onclick="buy()">Comprar Ração</button><button onclick="consume()">Consumir Ração</button></div><p class="muted">Valores são DEMO e não alteram o Economy Balance.</p><h3>Inventário</h3><pre id="inventory"></pre></section>
+<section class="card"><h2>Action Queue</h2><pre id="queue"></pre></section>
+</div>
+<section class="card" style="margin-top:18px"><h2>Última resposta</h2><pre id="log">Pronto.</pre></section>
+</div>
+<script>
+const log=x=>document.querySelector('#log').textContent=JSON.stringify(x,null,2);const key=p=>p+'-'+crypto.randomUUID();
+async function api(path,opt={}){const r=await fetch(path,opt);const j=await r.json();log(j);if(!r.ok)throw j;return j}
+async function refreshAll(){try{const [me,b,inv,q]=await Promise.all([api('/api/v1/me'),api('/api/v1/accounts/fa-player/balance'),api('/api/v1/inventories/inv-player'),api('/api/v1/actions')]);balance.textContent=b.balance+' Cz';hunger.textContent=me.citizen.vitals.hunger;energy.textContent=me.citizen.vitals.energy;inventory.textContent=JSON.stringify(inv.items,null,2);queue.textContent=JSON.stringify(q.items,null,2)}catch(e){}}
+async function work(){await api('/api/v1/public-jobs',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key('work')},body:JSON.stringify({duration_seconds:2})});refreshAll()}
+async function reconcile(){await api('/internal/reconcile',{method:'POST'});refreshAll()}
+async function buy(){await api('/api/v1/market-listings/lst-ration-basic/purchase',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key('buy')},body:JSON.stringify({quantity:1})});refreshAll()}
+async function consume(){await api('/api/v1/items/RATION_BASIC/consume',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key('eat')},body:JSON.stringify({quantity:1})});refreshAll()}
+refreshAll();
+</script></body></html>

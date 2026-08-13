@@ -1,0 +1,13 @@
+{
+  "project": "CyberKingdom",
+  "package": "SQLite Prototype",
+  "version": "0.1.0",
+  "status": "READY_FOR_GITHUB_UPLOAD",
+  "reference_slice": "VS-001",
+  "database": "SQLite",
+  "runtime": "Python 3.11+ standard library",
+  "avatar_scope": "HOLD",
+  "balance_values": "DEMO_ONLY",
+  "github_ready": true,
+  "local_validation": "14/14 PASS + VS-001 PASS + HTTP smoke PASS"
+}

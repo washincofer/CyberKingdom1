@@ -1,0 +1,30 @@
+name: Backend SQLite CI
+
+on:
+  push:
+    branches: ["main", "develop", "dev/**", "feature/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: SQLite version
+        run: python -c "import sqlite3; print(sqlite3.sqlite_version)"
+      - name: Run unit + concurrency tests
+        env:
+          PYTHONPATH: backend
+        run: python -m unittest discover -s backend/tests -v
+      - name: Run VS-001 deterministic playtest
+        if: matrix.python-version == '3.12'
+        run: python scripts/playtest.py
