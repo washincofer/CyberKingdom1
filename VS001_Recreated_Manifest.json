@@ -1,0 +1,24 @@
+{
+  "project": "CyberKingdoms",
+  "artifact": "VS-001 Recreated Integrated Candidate 01",
+  "status": "RECREATED_FROM_APPROVED_BEHAVIOR",
+  "source_of_truth": "VS-001 freeze behavior + SQLite API prototype",
+  "visual_reconstruction_authorized": true,
+  "backend_authoritative": true,
+  "journey": [
+    "Public Work",
+    "Action Queue",
+    "Receive Cz",
+    "Regional Market",
+    "Purchase",
+    "Inventory",
+    "Consume"
+  ],
+  "known_limitations": [
+    "Original VS-001 visual package unavailable",
+    "Avatar in recreated scene is a technical CSS placeholder",
+    "No real authentication",
+    "Economy values are DEMO",
+    "SQLite remains prototype persistence"
+  ]
+}

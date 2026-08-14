@@ -1,27 +1,208 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CyberKingdoms — VS-001 SQLite Prototype</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CyberKingdoms — VS-001 Recreated Integrated Candidate 01</title>
 <style>
-:root{font-family:Inter,system-ui,sans-serif;color:#d9e7ff;background:#07101f}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#07101f,#101a2e);min-height:100vh}.wrap{max-width:1100px;margin:auto;padding:32px}.top{display:flex;justify-content:space-between;align-items:end;gap:16px}.badge{border:1px solid #3f7cff;border-radius:999px;padding:6px 10px;font-size:12px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:24px}.card{background:#101a2ecc;border:1px solid #273858;border-radius:16px;padding:18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#0a1426;border-radius:12px;padding:12px}.value{font-size:24px;font-weight:700}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}button{cursor:pointer;border:0;border-radius:10px;padding:11px 14px;font-weight:700;background:#2d6fff;color:white}button.secondary{background:#263653}pre{background:#050b15;border-radius:10px;padding:12px;min-height:220px;max-height:420px;overflow:auto;color:#bcd2ff}.muted{color:#8ea3c5;font-size:13px}@media(max-width:800px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
+:root{
+  color-scheme:dark;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --bg:#07101b;--bg2:#0d1827;--panel:#101e30e8;--panel2:#13253a;--line:#29425f;
+  --text:#edf6ff;--muted:#8fa9c3;--cyan:#54d9ff;--blue:#4a82ff;--green:#5be7a9;--amber:#ffc966;--danger:#ff7a8a;
+  --shadow:0 18px 60px rgba(0,0,0,.32);
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text)}
+body{min-height:100vh;background:
+ radial-gradient(circle at 15% 5%,rgba(74,130,255,.18),transparent 32%),
+ radial-gradient(circle at 88% 18%,rgba(84,217,255,.12),transparent 28%),
+ linear-gradient(145deg,#06101b,#091523 42%,#07101b)}
+button{font:inherit}.app{max-width:1440px;margin:auto;padding:18px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 16px;border:1px solid var(--line);border-radius:18px;background:#0b1725d9;box-shadow:var(--shadow);position:sticky;top:10px;z-index:20;backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:12px}.sigil{width:38px;height:38px;border:1px solid #4a82ff;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#132b48,#0d1727);box-shadow:inset 0 0 22px rgba(84,217,255,.08)}.sigil:before{content:"CK";font-size:12px;font-weight:900;letter-spacing:.08em;color:var(--cyan)}
+.brand h1{font-size:16px;margin:0;letter-spacing:.04em}.sub{font-size:11px;color:var(--muted);margin-top:2px}.top-actions{display:flex;align-items:center;gap:8px}.pill{font-size:11px;padding:6px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}.pill.ok{color:var(--green);border-color:#2a785d}.btn{border:1px solid transparent;border-radius:11px;padding:10px 12px;cursor:pointer;font-weight:800;transition:.15s ease;background:var(--blue);color:white}.btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.08)}.btn:disabled{opacity:.42;cursor:not-allowed}.btn.secondary{background:#16283c;border-color:#31506f;color:#d7e9fb}.btn.ghost{background:transparent;border-color:#31506f;color:#aac2d9}.btn.danger{background:#351a24;border-color:#744051;color:#ffb8c2}.btn.small{padding:7px 9px;font-size:11px}
+.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(330px,.8fr);gap:16px;margin-top:16px}.left,.right{display:grid;gap:16px;align-content:start}.panel{border:1px solid var(--line);border-radius:18px;background:var(--panel);box-shadow:var(--shadow);overflow:hidden}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #203851}.panel-head h2,.panel-head h3{margin:0;font-size:14px}.panel-body{padding:16px}
+.scene{min-height:460px;position:relative;overflow:hidden;background:linear-gradient(#0b1b2a 0 46%,#101b27 46%);isolation:isolate}.scene:before{content:"";position:absolute;inset:0;background:
+ linear-gradient(90deg,transparent 49.8%,rgba(84,217,255,.08) 50%,transparent 50.2%),
+ linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:100% 100%,100% 36px;opacity:.35;pointer-events:none}.skyline{position:absolute;inset:70px 0 auto 0;height:150px;display:flex;align-items:end;gap:10px;padding:0 20px;opacity:.8}.building{flex:1;min-width:70px;background:linear-gradient(180deg,#16324a,#0d1f30);border:1px solid #214765;border-bottom:0;position:relative}.building:after{content:"";position:absolute;inset:12px;background:repeating-linear-gradient(90deg,#5cd8ff33 0 3px,transparent 3px 17px),repeating-linear-gradient(0deg,#5cd8ff25 0 2px,transparent 2px 16px)}
+.scene-title{position:absolute;left:20px;top:18px;z-index:5}.scene-title .kicker{font-size:10px;color:var(--cyan);letter-spacing:.16em;text-transform:uppercase}.scene-title h2{margin:4px 0 0;font-size:26px}.scene-title p{margin:5px 0 0;color:var(--muted);font-size:12px}.nodes{position:absolute;left:18px;right:18px;bottom:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;z-index:6}.node{border:1px solid #31506d;background:#0c1825e8;border-radius:14px;padding:13px;cursor:pointer;min-height:94px;text-align:left;color:var(--text);position:relative;overflow:hidden}.node:hover{border-color:#4b80aa}.node.active{border-color:var(--cyan);box-shadow:0 0 0 1px #54d9ff33 inset}.node .n-title{font-weight:900;font-size:13px}.node .n-sub{font-size:11px;color:var(--muted);margin-top:5px}.node .tag{position:absolute;right:9px;top:9px;font-size:9px;color:#9eb5ca}.node.locked{opacity:.58;cursor:default}
+.avatar-zone{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);z-index:4;width:230px;height:230px;display:grid;place-items:center}.avatar-ring{position:absolute;width:190px;height:190px;border:1px solid #315272;border-radius:50%;box-shadow:0 0 50px rgba(84,217,255,.08) inset}.avatar{position:relative;width:108px;height:190px}.head{position:absolute;top:9px;left:32px;width:44px;height:52px;border-radius:44% 44% 48% 48%;background:#bba896;border:1px solid #d7c7b6}.hair{position:absolute;top:3px;left:27px;width:54px;height:33px;border-radius:50% 50% 30% 30%;background:#263444;transform:skew(-7deg)}.body{position:absolute;top:62px;left:22px;width:64px;height:80px;border-radius:14px 14px 11px 11px;background:linear-gradient(135deg,#263d59,#18293e);border:1px solid #41617f}.arm{position:absolute;top:70px;width:18px;height:78px;border-radius:9px;background:#1b2c40;border:1px solid #3e5d79}.arm.l{left:5px;transform:rotate(5deg)}.arm.r{right:5px;transform:rotate(-5deg)}.leg{position:absolute;top:136px;width:25px;height:53px;border-radius:7px;background:#172536;border:1px solid #38536d}.leg.l{left:25px}.leg.r{right:25px}.avatar-label{position:absolute;bottom:-12px;white-space:nowrap;font-size:10px;color:var(--muted);background:#08121dbd;border:1px solid #29435e;border-radius:999px;padding:5px 8px}
+.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{padding:12px;border:1px solid #263e58;border-radius:13px;background:#0b1724}.stat .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.stat .value{font-size:21px;font-weight:900;margin-top:4px}.bar{height:6px;background:#07111c;border-radius:999px;margin-top:8px;overflow:hidden}.fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--cyan))}.fill.energy{background:linear-gradient(90deg,#56b98c,var(--green))}.fill.hunger{background:linear-gradient(90deg,#b18842,var(--amber))}
+.journey{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.journey .num{width:34px;height:34px;border-radius:10px;background:#17314c;border:1px solid #345675;display:grid;place-items:center;color:var(--cyan);font-weight:900}.journey .title{font-weight:900;font-size:13px}.journey .desc{font-size:11px;color:var(--muted);margin-top:3px}.progressline{height:5px;border-radius:999px;background:#0b1622;overflow:hidden;margin-top:12px}.progressline>div{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .2s}
+.queue-list{display:grid;gap:8px}.queue-item{border:1px solid #29425e;border-radius:13px;padding:10px;background:#0b1724}.qtop{display:flex;justify-content:space-between;gap:8px;align-items:center}.qname{font-weight:900;font-size:12px}.status{font-size:9px;padding:4px 6px;border-radius:999px;border:1px solid #365675;color:#9fb9d1}.status.running{color:var(--green);border-color:#34785f}.status.queued{color:var(--amber);border-color:#6f5a34}.status.completed{color:#91a6bb}.qmeta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;color:var(--muted);font-size:10px}.qempty{padding:20px;text-align:center;border:1px dashed #2b4560;border-radius:13px;color:var(--muted);font-size:11px}.queue-counter{font-size:11px;color:var(--muted)}
+.market-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.listing{border:1px solid #29425e;border-radius:15px;background:#0b1724;padding:13px}.item-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#254b63,#183045);display:grid;place-items:center;font-weight:900;color:var(--cyan);margin-bottom:10px}.listing h4{margin:0;font-size:13px}.listing p{font-size:11px;color:var(--muted);min-height:30px}.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.price{font-weight:900;color:var(--amber)}
+.inventory{display:grid;gap:8px}.inv-row{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid #29425e;border-radius:12px;padding:10px;background:#0b1724}.inv-row .name{font-size:12px;font-weight:900}.inv-row .qty{font-size:11px;color:var(--muted)}.empty{font-size:11px;color:var(--muted)}
+.toast-stack{position:fixed;right:18px;bottom:18px;display:grid;gap:8px;z-index:50}.toast{max-width:340px;padding:11px 13px;border-radius:12px;border:1px solid #3c5a76;background:#0d1a28;box-shadow:var(--shadow);font-size:11px}.toast.error{border-color:#774153;color:#ffc4cd}.debug{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;white-space:pre-wrap;color:#9cb5cc;max-height:210px;overflow:auto;margin:0}.hidden{display:none!important}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.right{grid-template-columns:repeat(2,minmax(0,1fr))}.right>.panel:last-child{grid-column:1/-1}.scene{min-height:430px}}
+@media(max-width:760px){.app{padding:10px}.topbar{top:4px}.pill.demo{display:none}.layout{gap:10px}.right{grid-template-columns:1fr}.right>.panel:last-child{grid-column:auto}.hud{grid-template-columns:repeat(2,1fr)}.nodes{grid-template-columns:repeat(2,1fr)}.scene{min-height:560px}.avatar-zone{top:42%}.market-grid{grid-template-columns:1fr}.top-actions .btn.ghost{display:none}}
 </style>
 </head>
-<body><div class="wrap">
-<div class="top"><div><div class="badge">VS-001 • SQLite Prototype v0.1</div><h1>CyberKingdoms Backend Slice</h1><div class="muted">Trabalho → Action Queue → Cz → Mercado → Comprar → Consumir</div></div><button class="secondary" onclick="refreshAll()">Atualizar</button></div>
-<div class="grid">
-<section class="card"><h2>Estado do cidadão</h2><div class="stats"><div class="stat"><div class="muted">Saldo</div><div class="value" id="balance">–</div></div><div class="stat"><div class="muted">Fome</div><div class="value" id="hunger">–</div></div><div class="stat"><div class="muted">Energia</div><div class="value" id="energy">–</div></div></div><div class="actions"><button onclick="work()">Iniciar Trabalho</button><button onclick="reconcile()">Reconciliar</button><button onclick="buy()">Comprar Ração</button><button onclick="consume()">Consumir Ração</button></div><p class="muted">Valores são DEMO e não alteram o Economy Balance.</p><h3>Inventário</h3><pre id="inventory"></pre></section>
-<section class="card"><h2>Action Queue</h2><pre id="queue"></pre></section>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="sigil"></div><div><h1>CyberKingdoms</h1><div class="sub">VS-001 Recreated • Integrated Candidate 01</div></div></div>
+    <div class="top-actions"><span class="pill demo">DEMO • valores não balanceados</span><span class="pill" id="conn-pill">API…</span><button class="btn ghost small" id="sync-btn">Sincronizar</button></div>
+  </header>
+
+  <main class="layout">
+    <section class="left">
+      <div class="panel scene" id="scene">
+        <div class="scene-title"><div class="kicker" id="scene-kicker">Distrito Central</div><h2 id="scene-name">City Hub</h2><p id="scene-desc">Escolha um destino ou serviço. Não é free-walk.</p></div>
+        <div class="skyline" aria-hidden="true"><div class="building" style="height:45%"></div><div class="building" style="height:78%"></div><div class="building" style="height:58%"></div><div class="building" style="height:90%"></div><div class="building" style="height:66%"></div><div class="building" style="height:82%"></div></div>
+        <div class="avatar-zone"><div class="avatar-ring"></div><div class="avatar" aria-label="Avatar técnico recriado"><div class="hair"></div><div class="head"></div><div class="body"></div><div class="arm l"></div><div class="arm r"></div><div class="leg l"></div><div class="leg r"></div></div><div class="avatar-label" id="citizen-label">Cidadão • carregando</div></div>
+        <div class="nodes" id="hub-nodes">
+          <button class="node active" data-destination="work"><span class="tag">AÇÃO</span><div class="n-title">Trabalho Público</div><div class="n-sub">Adicione trabalho à Action Queue e receba Cz após a conclusão.</div></button>
+          <button class="node" data-destination="market"><span class="tag">24H</span><div class="n-title">Mercado Regional</div><div class="n-sub">Compre itens sem interromper ações em andamento.</div></button>
+          <button class="node locked" disabled><span class="tag">FUTURO</span><div class="n-title">Residência</div><div class="n-sub">Fora do escopo da VS-001.</div></button>
+          <button class="node locked" disabled><span class="tag">FUTURO</span><div class="n-title">Administração</div><div class="n-sub">Fora do escopo da VS-001.</div></button>
+        </div>
+        <div class="nodes hidden" id="market-nodes" style="grid-template-columns:1fr auto">
+          <button class="node active" disabled><span class="tag">MERCADO</span><div class="n-title">Mercado Regional 24h</div><div class="n-sub">Compra direta. Estoque e saldo são validados pelo backend.</div></button>
+          <button class="node" id="back-hub"><div class="n-title">← Voltar ao Hub</div><div class="n-sub">Retorna ao contexto da cidade.</div></button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Estado do cidadão</h3><span class="queue-counter" id="updated-at">—</span></div>
+        <div class="panel-body"><div class="hud">
+          <div class="stat"><div class="label">Saldo</div><div class="value" id="balance">—</div><div class="bar"><div class="fill" style="width:100%"></div></div></div>
+          <div class="stat"><div class="label">Fome</div><div class="value" id="hunger">—</div><div class="bar"><div class="fill hunger" id="hunger-fill" style="width:0%"></div></div></div>
+          <div class="stat"><div class="label">Energia</div><div class="value" id="energy">—</div><div class="bar"><div class="fill energy" id="energy-fill" style="width:0%"></div></div></div>
+          <div class="stat"><div class="label">Fila ativa</div><div class="value" id="active-count">—</div><div class="bar"><div class="fill" id="queue-fill" style="width:0%"></div></div></div>
+        </div></div>
+      </div>
+
+      <div class="panel" id="journey-panel">
+        <div class="panel-head"><h3>Jornada VS-001</h3><span class="pill ok">FREEZE BEHAVIOR</span></div>
+        <div class="panel-body"><div class="journey"><div class="num" id="journey-num">1</div><div><div class="title" id="journey-title">Inicie um Trabalho Público</div><div class="desc" id="journey-desc">A ação entra na fila persistente e será reconciliada pelo servidor.</div></div><button class="btn" id="primary-action">Trabalhar</button></div><div class="progressline"><div id="journey-progress" style="width:14%"></div></div></div>
+      </div>
+
+      <div class="panel hidden" id="market-panel">
+        <div class="panel-head"><h3>Mercado Regional 24h</h3><span class="queue-counter">disponível durante ações</span></div>
+        <div class="panel-body"><div class="market-grid" id="market-grid"><div class="empty">Carregando listagens…</div></div></div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="panel">
+        <div class="panel-head"><h3>Action Queue</h3><span class="queue-counter" id="queue-counter">0 / 10</span></div>
+        <div class="panel-body"><div class="queue-list" id="queue-list"><div class="qempty">Nenhuma ação ativa.</div></div><div style="margin-top:10px;display:flex;gap:8px"><button class="btn small" id="queue-work">+ Trabalho</button><button class="btn secondary small" id="reconcile-btn">Reconciliar</button></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Inventário</h3><span class="queue-counter" id="inventory-id">—</span></div>
+        <div class="panel-body"><div class="inventory" id="inventory"><div class="empty">Inventário vazio.</div></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Estado técnico</h3><span class="queue-counter">backend-authoritative</span></div>
+        <div class="panel-body"><p class="debug" id="debug">Aguardando API…</p></div>
+      </div>
+    </aside>
+  </main>
 </div>
-<section class="card" style="margin-top:18px"><h2>Última resposta</h2><pre id="log">Pronto.</pre></section>
-</div>
+<div class="toast-stack" id="toast-stack"></div>
 <script>
-const log=x=>document.querySelector('#log').textContent=JSON.stringify(x,null,2);const key=p=>p+'-'+crypto.randomUUID();
-async function api(path,opt={}){const r=await fetch(path,opt);const j=await r.json();log(j);if(!r.ok)throw j;return j}
-async function refreshAll(){try{const [me,b,inv,q]=await Promise.all([api('/api/v1/me'),api('/api/v1/accounts/fa-player/balance'),api('/api/v1/inventories/inv-player'),api('/api/v1/actions')]);balance.textContent=b.balance+' Cz';hunger.textContent=me.citizen.vitals.hunger;energy.textContent=me.citizen.vitals.energy;inventory.textContent=JSON.stringify(inv.items,null,2);queue.textContent=JSON.stringify(q.items,null,2)}catch(e){}}
-async function work(){await api('/api/v1/public-jobs',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key('work')},body:JSON.stringify({duration_seconds:2})});refreshAll()}
-async function reconcile(){await api('/internal/reconcile',{method:'POST'});refreshAll()}
-async function buy(){await api('/api/v1/market-listings/lst-ration-basic/purchase',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key('buy')},body:JSON.stringify({quantity:1})});refreshAll()}
-async function consume(){await api('/api/v1/items/RATION_BASIC/consume',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':key('eat')},body:JSON.stringify({quantity:1})});refreshAll()}
-refreshAll();
-</script></body></html>
+const state={me:null,balance:null,inventory:null,actions:null,listings:null,view:'hub',lastError:null};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const idem=p=>`${p}-${crypto.randomUUID()}`;
+const activeActions=()=>state.actions?.items?.filter(a=>['QUEUED','RUNNING'].includes(a.status))||[];
+const rationQty=()=>Number(state.inventory?.items?.RATION_BASIC||0);
+const cz=()=>Number(state.balance?.balance||0);
+const listing=()=>state.listings?.items?.find(x=>x.item_code==='RATION_BASIC')||null;
+
+function toast(message,type='ok'){
+  const el=document.createElement('div'); el.className='toast'+(type==='error'?' error':''); el.textContent=message;
+  $('#toast-stack').appendChild(el); setTimeout(()=>el.remove(),4200);
+}
+async function api(path,opt={}){
+  const r=await fetch(path,{...opt,headers:{Accept:'application/json',...(opt.headers||{})}});
+  let j={}; try{j=await r.json()}catch{j={status:r.status,message:'Resposta inválida do servidor'}}
+  if(!r.ok){const err=new Error(j.message||`HTTP ${r.status}`); err.payload=j; throw err} return j;
+}
+function setConnection(ok){const p=$('#conn-pill');p.textContent=ok?'API online':'API indisponível';p.className='pill '+(ok?'ok':'');}
+function secondsLabel(iso){const t=new Date(iso).getTime()-Date.now();const s=Math.max(0,Math.ceil(t/1000));if(s<60)return `${s}s`;return `${Math.floor(s/60)}m ${s%60}s`;}
+function actionLabel(a){return a.type==='PUBLIC_WORK'?'Trabalho Público':a.type;}
+function statusLabel(s){return ({RUNNING:'EM ANDAMENTO',QUEUED:'NA FILA',COMPLETED:'CONCLUÍDA',INTERRUPTED:'INTERROMPIDA'})[s]||s;}
+function safeText(v){return String(v??'');}
+
+async function refresh({silent=false}={}){
+  try{
+    const [me,balance,inventory,actions,listings]=await Promise.all([
+      api('/api/v1/me'),api('/api/v1/accounts/fa-player/balance'),api('/api/v1/inventories/inv-player'),api('/api/v1/actions'),api('/api/v1/markets/city-alpha/listings')
+    ]);
+    Object.assign(state,{me,balance,inventory,actions,listings,lastError:null}); setConnection(true); render();
+    if(!silent) toast('Estado sincronizado com o backend.');
+  }catch(e){state.lastError=e.payload||{message:e.message};setConnection(false);renderDebug();if(!silent)toast(e.payload?.message||e.message,'error');}
+}
+async function work(){
+  try{await api('/api/v1/public-jobs',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':idem('work')},body:JSON.stringify({duration_seconds:2})});toast('Trabalho Público adicionado à Action Queue.');await refresh({silent:true});}
+  catch(e){toast(e.payload?.message||e.message,'error');await refresh({silent:true});}
+}
+async function reconcile(){
+  try{const r=await api('/internal/reconcile',{method:'POST'});toast(`Reconciliação: ${r.completed||0} concluída(s).`);await refresh({silent:true});}
+  catch(e){toast(e.payload?.message||e.message,'error');}
+}
+async function buy(){
+  const l=listing(); if(!l)return;
+  try{const r=await api(`/api/v1/market-listings/${encodeURIComponent(l.id)}/purchase`,{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':idem('buy')},body:JSON.stringify({quantity:1})});toast(`Compra concluída: ${r.total_cz} Cz.`);await refresh({silent:true});}
+  catch(e){toast(e.payload?.message||e.message,'error');await refresh({silent:true});}
+}
+async function consume(){
+  try{await api('/api/v1/items/RATION_BASIC/consume',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':idem('eat')},body:JSON.stringify({quantity:1})});toast('Ração consumida.');await refresh({silent:true});}
+  catch(e){toast(e.payload?.message||e.message,'error');await refresh({silent:true});}
+}
+async function cancelAction(id){
+  try{await api(`/api/v1/actions/${encodeURIComponent(id)}`,{method:'DELETE'});toast('Ação removida da fila.');await refresh({silent:true});}
+  catch(e){toast(e.payload?.message||e.message,'error');await refresh({silent:true});}
+}
+function setView(view){state.view=view;$('#hub-nodes').classList.toggle('hidden',view!=='hub');$('#market-nodes').classList.toggle('hidden',view!=='market');$('#market-panel').classList.toggle('hidden',view!=='market');$('#scene-name').textContent=view==='market'?'Mercado Regional':'City Hub';$('#scene-kicker').textContent=view==='market'?'Distrito Comercial':'Distrito Central';$('#scene-desc').textContent=view==='market'?'Compra direta com saldo, estoque e inventário persistentes.':'Escolha um destino ou serviço. Não é free-walk.';renderJourney();}
+
+function render(){
+  const me=state.me?.citizen||{};const account=state.me?.account||{};const active=activeActions();
+  $('#citizen-label').textContent=`${account.display_name||'Cidadão'} • ${me.city_id||'cidade'}`;
+  $('#balance').textContent=`${state.balance?.balance??'—'} Cz`;
+  $('#hunger').textContent=me.vitals?.hunger??'—';$('#energy').textContent=me.vitals?.energy??'—';
+  $('#hunger-fill').style.width=`${Math.max(0,Math.min(100,Number(me.vitals?.hunger||0)))}%`;$('#energy-fill').style.width=`${Math.max(0,Math.min(100,Number(me.vitals?.energy||0)))}%`;
+  $('#active-count').textContent=`${active.length}/10`;$('#queue-fill').style.width=`${active.length*10}%`;$('#queue-counter').textContent=`${active.length} / ${state.actions?.limit||10}`;
+  $('#inventory-id').textContent=state.inventory?.id||'—';$('#updated-at').textContent=`atualizado ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}`;
+  renderQueue();renderInventory();renderMarket();renderJourney();renderDebug();
+}
+function renderQueue(){
+  const el=$('#queue-list');const active=activeActions();if(!active.length){el.innerHTML='<div class="qempty">Nenhuma ação ativa.<br>Adicione Trabalho Público para iniciar a jornada.</div>';return}
+  el.innerHTML='';for(const a of active){
+    const item=document.createElement('div');item.className='queue-item';const timing=a.status==='RUNNING'?`termina em ${secondsLabel(a.due_at)}`:`inicia em ${secondsLabel(a.starts_at)}`;
+    item.innerHTML=`<div class="qtop"><div class="qname">#${a.position} · ${safeText(actionLabel(a))}</div><span class="status ${a.status.toLowerCase()}">${safeText(statusLabel(a.status))}</span></div><div class="qmeta"><span>${timing}</span><span>${a.status==='QUEUED'?'<button class="btn danger small cancel">Cancelar</button>':'servidor ativo'}</span></div>`;
+    const c=item.querySelector('.cancel');if(c)c.addEventListener('click',()=>cancelAction(a.id));el.appendChild(item);
+  }
+}
+function renderInventory(){
+  const el=$('#inventory');const entries=Object.entries(state.inventory?.items||{}).filter(([,q])=>q>0);if(!entries.length){el.innerHTML='<div class="empty">Inventário vazio.</div>';return}
+  el.innerHTML='';for(const [code,q] of entries){const row=document.createElement('div');row.className='inv-row';row.innerHTML=`<div><div class="name">${code==='RATION_BASIC'?'Ração Básica':safeText(code)}</div><div class="qty">Quantidade: ${q}</div></div>${code==='RATION_BASIC'?'<button class="btn secondary small consume">Consumir</button>':''}`;row.querySelector('.consume')?.addEventListener('click',consume);el.appendChild(row)}
+}
+function renderMarket(){
+  const el=$('#market-grid');const items=state.listings?.items||[];if(!items.length){el.innerHTML='<div class="empty">Nenhuma listagem ativa no momento.</div>';return}
+  el.innerHTML='';for(const l of items){const canBuy=cz()>=Number(l.price_cz)&&Number(l.available_qty)>0;const card=document.createElement('div');card.className='listing';card.innerHTML=`<div class="item-icon">RB</div><h4>${l.item_code==='RATION_BASIC'?'Ração Básica':safeText(l.item_code)}</h4><p>Consumível da slice. Recupera fome conforme parâmetro DEMO do servidor.</p><div class="row"><div><div class="price">${l.price_cz} Cz</div><div class="sub">estoque ${l.available_qty}</div></div><button class="btn small buy" ${canBuy?'':'disabled'}>${canBuy?'Comprar':cz()<Number(l.price_cz)?'Saldo insuficiente':'Sem estoque'}</button></div>`;card.querySelector('.buy')?.addEventListener('click',buy);el.appendChild(card)}
+}
+function journeyStep(){
+  const active=activeActions();const hasRation=rationQty()>0;const enough=cz()>=(listing()?.price_cz??20);const anyCompleted=(state.actions?.items||[]).some(a=>a.status==='COMPLETED');
+  if(hasRation)return {n:6,title:'Consuma a Ração Básica',desc:'O item sai do inventário e a fome é atualizada pelo servidor.',label:'Consumir',action:consume,progress:86};
+  if(enough)return {n:5,title:'Compre no Mercado Regional',desc:'A compra valida saldo e estoque de forma atômica e persiste no inventário.',label:'Ir ao Mercado',action:()=>setView('market'),progress:72};
+  if(active.length)return {n:2,title:'Aguarde a Action Queue',desc:'Você pode acessar o Mercado enquanto o trabalho continua. A conclusão é reconciliada por timestamp.',label:'Reconciliar',action:reconcile,progress:34};
+  if(anyCompleted&&cz()>0)return {n:4,title:'Seu pagamento em Cz foi liquidado',desc:'O saldo é autoridade do backend. Agora siga para o Mercado Regional.',label:'Ir ao Mercado',action:()=>setView('market'),progress:58};
+  return {n:1,title:'Inicie um Trabalho Público',desc:'A ação entra na fila FIFO persistente, limitada a 10 posições.',label:'Trabalhar',action:work,progress:14};
+}
+function renderJourney(){
+  const s=journeyStep();$('#journey-num').textContent=s.n;$('#journey-title').textContent=s.title;$('#journey-desc').textContent=s.desc;$('#journey-progress').style.width=`${s.progress}%`;const b=$('#primary-action');b.textContent=s.label;b.onclick=s.action;
+  if(state.view==='market'&&s.n<5){$('#journey-title').textContent='Mercado acessível durante a Action Queue';$('#journey-desc').textContent='Você pode consultar o mercado sem interromper a ação em andamento.';}
+}
+function renderDebug(){
+  const active=activeActions();const payload={source:'SQLite/API',account:state.me?.account?.display_name||null,city:state.me?.citizen?.city_id||null,balance_cz:state.balance?.balance??null,hunger:state.me?.citizen?.vitals?.hunger??null,energy:state.me?.citizen?.vitals?.energy??null,active_queue:active.map(a=>({position:a.position,status:a.status,type:a.type,starts_at:a.starts_at,due_at:a.due_at})),inventory:state.inventory?.items||{},last_error:state.lastError};$('#debug').textContent=JSON.stringify(payload,null,2);
+}
+
+$$('[data-destination="market"]').forEach(b=>b.addEventListener('click',()=>setView('market')));$$('[data-destination="work"]').forEach(b=>b.addEventListener('click',work));
+$('#back-hub').addEventListener('click',()=>setView('hub'));$('#sync-btn').addEventListener('click',()=>refresh());$('#queue-work').addEventListener('click',work);$('#reconcile-btn').addEventListener('click',reconcile);
+setInterval(()=>{if(document.visibilityState==='visible')refresh({silent:true})},2000);setInterval(()=>{if(state.actions)renderQueue()},500);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refresh({silent:true})});
+refresh({silent:true});
+</script>
+</body>
+</html>
